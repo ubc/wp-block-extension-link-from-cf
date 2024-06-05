@@ -49,7 +49,6 @@ function enqueue_assets() {
 			'nonce' => wp_create_nonce( 'wp_link_from_cf' ),
 		)
 	);
-
 }//end enqueue_assets()
 
 add_action( 'wp_ajax_wp_link_from_cf_get_meta_keys', __NAMESPACE__ . '\\get_meta_keys' );
@@ -96,4 +95,3 @@ function reset_metakeys_transient() {
 		delete_transient( 'wp_link_from_cf' );
 	}
 }//end reset_metakeys_transient()
-

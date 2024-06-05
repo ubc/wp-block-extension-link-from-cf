@@ -24,7 +24,11 @@ function addAdditionalAttribute( settings, name ) {
             CFKey: {
                 type: 'string',
                 default: ''
-            }
+            },
+            openInNewTab: {
+                type: 'boolean',
+                default: false
+            },
         },
         usesContext: [ 'postId' ]
     }
@@ -43,7 +47,7 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 
     return ( props ) => {
         const { name, attributes, setAttributes } = props;
-        const { enableCF, CFKey, linkToPost } = attributes;
+        const { enableCF, CFKey, linkToPost, openInNewTab } = attributes;
         const [ metaKeys, setMetaKeys ] = useState([]);
     
         if( 'core/button' !== name ) {
@@ -67,6 +71,12 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
                 
                 if( responseJson.success ) {
                     setMetaKeys( responseJson.data );
+
+                    if ( '' === CFKey ) {
+                        setAttributes({
+                            CFKey: responseJson.data[0]
+                        });
+                    }
                 }
             };
     
@@ -115,6 +125,18 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
                             __nextHasNoMarginBottom
                         />
                         : '' }
+                        { linkToPost || enableCF ? 
+                            <ToggleControl
+                                label="Open in new tab"
+                                checked={ openInNewTab }
+                                onChange={ () => {
+                                    setAttributes({
+                                        openInNewTab: ! openInNewTab,
+                                    });
+                                } }
+                            /> : null
+                        }
+                        
                     </PanelBody>
                 </InspectorControls>
             </Fragment>
